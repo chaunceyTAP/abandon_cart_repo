@@ -15,7 +15,79 @@ const products = [
 ]
 
 export default function ProductList() {
-  const { addToCart } = useAppContext()
+  const { addToCart, cart, user } = useAppContext()
+  const processCart = async (product)=>{
+   addToCart(product)
+    const payload = {
+	"header": {
+		"msgType": "xdmEntityCreate",
+		"msgId": "d70ed27c-88e4-4e98-88e3-53eb887365f9",
+		"msgVersion": "1.0",
+		"xactionId": "b3dad55c-810b-4ded-91ef-f22e211f9071",
+		"datasetId": "67ae3ccf635e342aee49ee1f",
+		"imsOrgId": "18F332CC5B4DB4150A495DF0@AdobeOrg",
+		"schemaRef": {
+			"id": "https://ns.adobe.com/taplondonptrsd/schemas/1821e745e4835f357400385329571973fae47eee99d5ce51",
+			"contentType": "application/vnd.adobe.xed-full+json;version=1"
+		},
+		"source": {
+			"name": "Journeys"
+		},
+		"strictValidation": true
+	},
+	"body": {
+		"xdmMeta": {
+			"schemaRef": {
+				"id": "https://ns.adobe.com/taplondonptrsd/schemas/1821e745e4835f357400385329571973fae47eee99d5ce51",
+				"contentType": "application/vnd.adobe.xed-full+json;version=1"
+			}
+		},
+		"xdmEntity": {
+			"_taplondonptrsd": {
+				"email": {
+					"address": user.email
+				}
+			},
+			"_id": "string",
+			"_experience": {
+				"campaign": {
+					"orchestration": {
+						"eventID": "865d42065aa9a89e5ca569a1a9ba62b46f1a95c74ceea5ced25823d72c555558"
+					}
+				}
+			},
+			"timestamp": "2018-05-29T00:00:00.000Z",
+   "productListItems": cart.map((item) => ({
+         priceTotal: item.price,
+          SKU: item.name,
+          quantity:item.quantity
+   }))
+   }
+		}
+	}
+
+    console.log(payload)
+    // Send login event to AEP
+    try {
+      const response = await fetch(
+        'https://dcs.adobedc.net/collection/e0958467cfc1dc3938c59affa11874dde158b2f903f3dfe9c45b4e331eb97669?synchronousValidation=true',
+        {
+          method: 'POST',
+
+          body: JSON.stringify(payload),
+        }
+      )
+
+      if (response.ok) {
+        console.log('Login event sent to AEP successfully:', response)
+      } else {
+        console.error('Failed to send updated_cart event:', response)
+      }
+    } catch (error) {
+      console.error('Error sending updated_cart event:', error)
+    }
+  
+  }
 
   return (
     <Container>
@@ -27,7 +99,7 @@ export default function ProductList() {
               <Card.Body>
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text>${product.price}</Card.Text>
-                <Button onClick={() => addToCart(product)}>Add to Cart</Button>
+                <Button onClick={() => processCart(product)}>Add to Cart</Button>
               </Card.Body>
             </Card>
           </Col>
@@ -35,4 +107,4 @@ export default function ProductList() {
       </Row>
     </Container>
   )
-}
+ }
