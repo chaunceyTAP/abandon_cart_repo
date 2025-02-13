@@ -103,12 +103,7 @@ function Login() {
         'https://dcs.adobedc.net/collection/e0958467cfc1dc3938c59affa11874dde158b2f903f3dfe9c45b4e331eb97669?synchronousValidation=true',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': '3b147b574a604f5692ae61ffe30d0ba8',
-            'x-gw-ims-org-id': '18F332CC5B4DB4150A495DF0@AdobeOrg',
-            'x-sandbox-name': 'tapdemo',
-          },
+
           body: JSON.stringify(payload),
         }
       )
