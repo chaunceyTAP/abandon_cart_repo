@@ -14,7 +14,13 @@ const products = [
   { id: 10, name: 'Charger', price: 39 },
 ]
 
-  let dt = new Date().getTime()
+  
+
+export default function ProductList() {
+ 
+  const { addToCart, cart, user } = useAppContext()
+  const processCart = async (product)=>{
+   let dt = new Date().getTime()
   const eventId = 'xxxxxxxx-xxxx-8xxx-yxxx-xxxxxxxxxxxx'.replace(
     /[xy]/g,
     function (c) {
@@ -23,10 +29,6 @@ const products = [
       return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
     }
   )
-
-export default function ProductList() {
-  const { addToCart, cart, user } = useAppContext()
-  const processCart = async (product)=>{
    addToCart(product)
     const payload = {
 	"header": {
@@ -58,7 +60,7 @@ export default function ProductList() {
 					"address": user.email
 				}
 			},
-			"_id": eventID,
+			"_id": eventId,
 			"_experience": {
 				"campaign": {
 					"orchestration": {
