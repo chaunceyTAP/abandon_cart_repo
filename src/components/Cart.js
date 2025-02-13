@@ -65,7 +65,7 @@ const processCart = async ()=>{
       )
 
       if (response.ok) {
-        console.log('Login event sent to AEP successfully:', response)
+        console.log('purchase event sent to AEP successfully:', response)
       } else {
         console.error('Failed to send PURCHASE event:', response)
       }

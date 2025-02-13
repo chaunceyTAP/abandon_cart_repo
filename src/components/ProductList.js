@@ -79,7 +79,7 @@ export default function ProductList() {
       )
 
       if (response.ok) {
-        console.log('Login event sent to AEP successfully:', response)
+        console.log('updated_cart event sent to AEP successfully:', response)
       } else {
         console.error('Failed to send updated_cart event:', response)
       }
