@@ -3,45 +3,78 @@ import { Card, Button, Container } from 'react-bootstrap'
 
 export default function Cart() {
   const { cart, removeFromCart, user } = useAppContext()
-  const submitCart = async () => {
-    // if (!user || !user.name || !user.email) {
-    //   alert('You must be logged in to submit your cart.')
-    //   return
-    // }
+const processCart = async ()=>{
     const payload = {
-      name: user.name,
-      email: user.email,
-      products: cart.map((item) => ({
-        id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-    }
+	"header": {
+		"msgType": "xdmEntityCreate",
+		"msgId": "d70ed27c-88e4-4e98-88e3-53eb887365f9",
+		"msgVersion": "1.0",
+		"xactionId": "b3dad55c-810b-4ded-91ef-f22e211f9071",
+		"datasetId": "67ae41f8d0ee342af2a35634",
+		"imsOrgId": "18F332CC5B4DB4150A495DF0@AdobeOrg",
+		"schemaRef": {
+			"id": "https://ns.adobe.com/taplondonptrsd/schemas/1821e745e4835f357400385329571973fae47eee99d5ce51",
+			"contentType": "application/vnd.adobe.xed-full+json;version=1"
+		},
+		"source": {
+			"name": "Journeys"
+		},
+		"strictValidation": true
+	},
+	"body": {
+		"xdmMeta": {
+			"schemaRef": {
+				"id": "https://ns.adobe.com/taplondonptrsd/schemas/1821e745e4835f357400385329571973fae47eee99d5ce51",
+				"contentType": "application/vnd.adobe.xed-full+json;version=1"
+			}
+		},
+		"xdmEntity": {
+			"_taplondonptrsd": {
+				"email": {
+					"address": user.email
+				}
+			},
+			"_id": "string",
+			"_experience": {
+				"campaign": {
+					"orchestration": {
+						"eventID": "2dde89a72a11d526807a1d7867cf139a9d391ea3d49e90b55eef3dff645262d7"
+					}
+				}
+			},
+			"timestamp": "2018-05-29T00:00:00.000Z",
+   "productListItems": cart.map((item) => ({
+         priceTotal: item.price,
+          SKU: item.name,
+          quantity:item.quantity
+   }))
+   }
+		}
+	}
 
+    console.log(payload)
+    // Send login event to AEP
     try {
       const response = await fetch(
-        'https://your-aep-endpoint.com/submit-cart',
+        'https://dcs.adobedc.net/collection/e0958467cfc1dc3938c59affa11874dde158b2f903f3dfe9c45b4e331eb97669?synchronousValidation=true',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+
           body: JSON.stringify(payload),
         }
       )
 
       if (response.ok) {
-        alert('Cart submitted successfully!')
+        console.log('Login event sent to AEP successfully:', response)
       } else {
-        console.error('Failed to submit cart:', response.statusText)
-        alert('Failed to submit cart.')
+        console.error('Failed to send PURCHASE event:', response)
       }
     } catch (error) {
-      console.error('Error submitting cart:', error)
-      alert('An error occurred while submitting the cart.')
+      console.error('Error sending PURCHASE event:', error)
     }
+  
   }
+
 
   return (
     <Container>
@@ -62,7 +95,7 @@ export default function Cart() {
           </Card>
         ))
       )}
-      <Button onClick={submitCart} disabled={cart.length === 0 || !user}>
+      <Button onClick={()=>{processCart()}} disabled={cart.length === 0 || !user}>
         Purchase
       </Button>
       <br />
