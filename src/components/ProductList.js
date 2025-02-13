@@ -57,10 +57,10 @@ export default function ProductList() {
 				}
 			},
 			"timestamp": "2018-05-29T00:00:00.000Z",
-   "productListItems": cart.map((item) => ({
-         priceTotal: item.price,
-          SKU: item.name,
-          quantity:item.quantity
+   "productListItems": cart.map((product) => ({
+         priceTotal: product.price,
+          SKU: product.name,
+          quantity:product.quantity
    }))
    }
 		}
