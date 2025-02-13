@@ -60,7 +60,7 @@ export default function ProductList() {
    "productListItems": [{
          priceTotal: product.price,
           SKU: product.name,
-          quantity:product.quantity
+          
    }]
    }
 		}
