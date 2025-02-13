@@ -14,6 +14,16 @@ const products = [
   { id: 10, name: 'Charger', price: 39 },
 ]
 
+  let dt = new Date().getTime()
+  const eventId = 'xxxxxxxx-xxxx-8xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    function (c) {
+      const r = (dt + Math.random() * 16) % 16 | 0
+      dt = Math.floor(dt / 16)
+      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
+    }
+  )
+
 export default function ProductList() {
   const { addToCart, cart, user } = useAppContext()
   const processCart = async (product)=>{
@@ -48,7 +58,7 @@ export default function ProductList() {
 					"address": user.email
 				}
 			},
-			"_id": "string",
+			"_id": eventID,
 			"_experience": {
 				"campaign": {
 					"orchestration": {
@@ -56,7 +66,7 @@ export default function ProductList() {
 					}
 				}
 			},
-			"timestamp": "2018-05-29T00:00:00.000Z",
+			"timestamp": new Date().toISOString(),
    "productListItems": [{
          priceTotal: product.price,
           SKU: product.name,

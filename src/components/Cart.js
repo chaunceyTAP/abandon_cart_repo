@@ -1,6 +1,17 @@
 import { useAppContext } from '../context/Context'
 import { Card, Button, Container } from 'react-bootstrap'
 
+
+  let dt = new Date().getTime()
+  const eventId = 'xxxxxxxx-xxxx-8xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    function (c) {
+      const r = (dt + Math.random() * 16) % 16 | 0
+      dt = Math.floor(dt / 16)
+      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
+    }
+  )
+
 export default function Cart() {
   const { cart, removeFromCart, user } = useAppContext()
 const processCart = async ()=>{
@@ -34,7 +45,7 @@ const processCart = async ()=>{
 					"address": user.email
 				}
 			},
-			"_id": "string",
+			"_id": eventId,
 			"_experience": {
 				"campaign": {
 					"orchestration": {
@@ -42,7 +53,7 @@ const processCart = async ()=>{
 					}
 				}
 			},
-			"timestamp": "2018-05-29T00:00:00.000Z",
+			"timestamp": new Date().toISOString(),
    "productListItems": cart.map((item) => ({
          priceTotal: item.price,
           SKU: item.name,
